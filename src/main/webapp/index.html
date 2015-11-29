@@ -5,9 +5,73 @@
 <title>SNORECHAT</title>
 <meta name="author" content="Katerina Kokaj">
 
+<script src="resource/js/jquery-1.10.2.min.js"></script>
+
 <!--- Styling -->
 <link rel="stylesheet" href="./resource/css/bootstrap.min.css">
 <link rel="stylesheet" href="style.css">
+<!--JavaScript-->
+<link href="./resource/css/bootstrap-responsive.css" rel="stylesheet">
+
+<script>
+	var wsocket;
+	var serviceLocation="";
+	var $userName;
+	var $message;
+	var $chatWindow;
+
+	function onMessageReceived(evt){
+		var msg = JSON.parse(evt.data); 
+		var $messageLine = $('<tr><td class="received">' + msg.received
+				+ '</td><td class="user label label-info">' + msg.sender
+				+ '</td><td class="message badge">' + msg.message
+				+ '</td></tr>');
+		$chatWindow.append($messageLine);
+	}
+	function sendMessage(){
+		var msg = '{message":"' + $messageval() + '","sender":"' + $userName.val() +'", "received":""}';
+		wsocket.send(msg);
+		$message.val('').focus();
+	}
+	function connectToServer(){
+		wsocket = new WebSocket(serviceLocation);
+		wsocket.onmessage = onMessageReceived;
+	}
+	function signOut(){
+		wsocket.close();
+		$chatWindow.empty();
+		$('.chat-wrapper').hide();
+		$('.chat-signin').show();
+		$userName.focus();
+	}
+
+	$(document).ready(function(){
+		$userName = $('#username');
+		$message = $('#message');
+		$chatWindow = $('#response');
+		$('.chat-wrapper').hide();
+		$userName.focus();
+
+		$('#enterChat').clicl(function(evt){
+			evt.preventDefault();
+			connectToServer();
+			$('.chat-wrapper h3').text('Chat #' + $userName.val());
+			$('.chat-signin').hide();
+			$('.chat-wrapper').show();
+			$message.focus();
+		});
+		$('#do-chat').submit(function(evt){
+			evt.preventDefault()
+			sendMessage()
+		});
+		$('#leave-chat').click(function(){
+			signOut
+		})
+
+	})
+
+</script>
+</head>
 
 <!-- Main Body -->
 <body>
@@ -39,4 +103,4 @@
 	
 </div>
 </body>
-</head>
+</html>
