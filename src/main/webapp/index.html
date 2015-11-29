@@ -6,14 +6,17 @@
 <meta name="author" content="Katerina Kokaj">
 
 <!--- Styling -->
+<link rel="stylesheet" href="./resource/css/bootstrap.min.css">
+<link rel="stylesheet" href="style.css">
+
 <!-- Main Body -->
 <body>
 	<div class="container chat-signin">
 		<form class="form-signin">
-			<h3 class="form-signin-heading">Sign In</h3>
+			<h2 class="form-signin-heading">Sign In</h2>
 			<label for="username"> Username</label> 
 				<input type="text" class="input-block-level" placeholder="Username" id="username">
-			<button class="btn btn-large btn-primary" type="submit" id="enterChat">Sign in</button>
+			<button class="btn btn-lg btn-info" type="submit" id="enterChat">Sign in</button>
 		</form>
 	</div>
 
@@ -21,13 +24,13 @@
 <div class="container chat-wrapper">
 	<form id="do-chat">
 		<h3 class="alert alert-success"></h3>
-		<table id="response" class="table table-bordered"></table>
+		<table id="response" class="table table-bordered table-hover"></table>
 		<fieldset>
 			<legend>Enter your Message...</legend>
 			<div class="controls">
 				<input type="text" class="input-block-level" placeholder="Your Message..." id="message" style="height:50px"/>
-				<input type="submit" class="btn btn-large btn-block btn-primary" value="Send Message" />
-				<button class="btn btn-large btn-block" type="button" id="leave-chat"> Sign Out</button>
+				<input type="submit" class="btn btn-default btn-block btn-info" value="Send Message" />
+				<button class="btn btn-default btn-block" type="button" id="leave-chat"> Sign Out</button>
 				
 			</div>
 		</fieldset>
