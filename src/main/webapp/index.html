@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>SNORECHAT</title>
+<title>FarmCHAT</title>
 <meta name="author" content="Katerina Kokaj">
 
 <script src="resource/js/jquery-1.10.2.min.js"></script>
@@ -15,10 +15,11 @@
 
 <script>
 	var wsocket;
-	var serviceLocation="";
+	var serviceLocation="ws://localhost:8080/";
 	var $userName;
 	var $message;
 	var $chatWindow;
+	var room = '';
 
 	function onMessageReceived(evt){
 		var msg = JSON.parse(evt.data); 
@@ -34,10 +35,11 @@
 		$message.val('').focus();
 	}
 	function connectToServer(){
-		wsocket = new WebSocket(serviceLocation);
+		room = $('#chatroom option:selected').val();
+		wsocket = new WebSocket(serviceLocation + room);
 		wsocket.onmessage = onMessageReceived;
 	}
-	function signOut(){
+	function leaveRoom(){
 		wsocket.close();
 		$chatWindow.empty();
 		$('.chat-wrapper').hide();
@@ -55,17 +57,17 @@
 		$('#enterChat').clicl(function(evt){
 			evt.preventDefault();
 			connectToServer();
-			$('.chat-wrapper h3').text('Chat #' + $userName.val());
+			$('.chat-wrapper h3').text('Chat #' + $userName.val() + "@" + room);
 			$('.chat-signin').hide();
 			$('.chat-wrapper').show();
 			$message.focus();
 		});
 		$('#do-chat').submit(function(evt){
-			evt.preventDefault()
-			sendMessage()
+			evt.preventDefault();
+			sendMessage();
 		});
-		$('#leave-chat').click(function(){
-			signOut
+		$('#leave-room').click(function(){
+			leaveRoom();
 		})
 
 	})
@@ -80,6 +82,15 @@
 			<h2 class="form-signin-heading">Sign In</h2>
 			<label for="username"> Username</label> 
 				<input type="text" class="input-block-level" placeholder="Username" id="username">
+			<div class="btn-group">
+				<label for="chatroom">Chatroom</label> <select size="1"
+					id="chatroom">
+					<option>MACHINERY</option>
+					<option>PRODUCTS</option>
+					<option>FARM-ANIMALS</option>
+					<option>SERVICES</option>
+				</select>
+			</div>
 			<button class="btn btn-lg btn-info" type="submit" id="enterChat">Sign in</button>
 		</form>
 	</div>
@@ -94,7 +105,7 @@
 			<div class="controls">
 				<input type="text" class="input-block-level" placeholder="Your Message..." id="message" style="height:50px"/>
 				<input type="submit" class="btn btn-default btn-block btn-info" value="Send Message" />
-				<button class="btn btn-default btn-block" type="button" id="leave-chat"> Sign Out</button>
+				<button class="btn btn-default btn-block" type="button" id="leave-chat"> Leave Room</button>
 				
 			</div>
 		</fieldset>
