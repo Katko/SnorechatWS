@@ -5,17 +5,13 @@
  */
 package com.WebServices;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.jws.WebService;
@@ -34,10 +30,9 @@ public class SnoreChatWebServices {
      * @param txt
      */
     @WebMethod(operationName = "chatOperation")
-    public List<String> chatOperation(@WebParam(name = "message") String txt){
+    public void chatOperation(@WebParam(name = "message") String txt){
        
-        String line;
-        List<String> MessagesArchive = new ArrayList<String>();
+        
         Path p = Paths.get("C://SnoreChatFiles/writeToFile.txt");
         String fileName = p.toString();
         
@@ -49,15 +44,9 @@ public class SnoreChatWebServices {
             writer.append(txt);
             writer.append(System.getProperty("line.separator"));
             writer.close();
-            BufferedReader input = new BufferedReader(new FileReader(fileName));
-            while((line = input.readLine()) != null ){
-                MessagesArchive.add(line);
-            }
-           
         } catch (IOException ex) {
             Logger.getLogger(SnoreChatWebServices.class.getName()).log(Level.SEVERE, null, ex);
         } 
-         return MessagesArchive;
         
     }
 }
